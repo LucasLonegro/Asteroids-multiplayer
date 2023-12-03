@@ -49,10 +49,10 @@ window.addEventListener('load', function () {
 
     function reScale(frontendItems) {
         if (devicePixelRatio !== 1)
-            frontendItems.forEach(all => all.forEach(pointCollection => pointCollection.points.forEach(p => {
+            frontendItems.forEach(pointCollection => pointCollection.points.forEach(p => {
                 p.x *= devicePixelRatio;
                 p.y *= devicePixelRatio;
-            })));
+            }));
     }
 
     function draw(pointCollection) {

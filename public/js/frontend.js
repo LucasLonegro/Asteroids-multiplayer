@@ -15,7 +15,7 @@ window.addEventListener('load', function () {
 
     socket.on('updatePlayers', (allItems) => {
         frontendItems.splice(0, frontendItems.length);
-        if (allItems !== undefined) {
+        if (allItems?.length) {
             reScale(allItems);
             allItems.forEach(i => frontendItems.push(i));
         }

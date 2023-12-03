@@ -332,8 +332,8 @@ class Polygon {
         context.fill();
     }
 
-    getPointCollection(strokeColor,fillColor){
-        return {fillColor:fillColor,strokeColor:strokeColor, points:this.copyPoints()};
+    getPointCollection(strokeColor, fillColor) {
+        return {fillColor: fillColor, strokeColor: strokeColor, points: this.copyPoints()};
     }
 
 }
@@ -341,8 +341,24 @@ class Polygon {
 class MovingPolygon extends Polygon {
     constructor(velocity, direction, points) {
         super(points);
-        this.velocity = velocity;
-        this.direction = direction;
+        this.xVelocity = velocity * Math.cos(direction);
+        this.yVelocity = velocity * Math.sin(direction);
+    }
+
+    velocity() {
+        return Math.sqrt(this.xVelocity * this.xVelocity + this.yVelocity * this.yVelocity);
+    }
+    direction(){
+        return this.pointArray[0].angle(new Point(this.pointArray[0].x+this.dx(),this.pointArray[0].y+this.dy()));
+    }
+
+    changeDirection(newDirection) {
+        let v = this.velocity();
+        this.xVelocity = v * Math.cos(newDirection);
+        this.yVelocity = v * Math.sin(newDirection);
+    }
+    changeDirBy(deltaDirection){
+        this.changeDirection(this.direction() + deltaDirection);
     }
 
     move() {
@@ -350,11 +366,11 @@ class MovingPolygon extends Polygon {
     }
 
     dx() {
-        return this.velocity * Math.cos(this.direction);
+        return this.xVelocity;
     }
 
     dy() {
-        return this.velocity * Math.sin(this.direction);
+        return this.yVelocity;
     }
 }
 
@@ -418,13 +434,8 @@ export class fullPolygon extends SpinningPolygon {
     }
 
     doThrust() {
-        let vel_x = this.velocity * Math.cos(this.direction) + this.thrust * Math.cos(this.angle);
-        let vel_y = this.velocity * Math.sin(this.direction) + this.thrust * Math.sin(this.angle);
-        this.velocity = Math.sqrt(vel_x * vel_x + vel_y * vel_y);
-        if (this.velocity === 0) {
-            this.direction = 0;
-        } else
-            this.direction = vel_y > 0 ? Math.acos(vel_x / this.velocity) : -Math.acos(vel_x / this.velocity);
+        this.xVelocity += this.thrust * Math.cos(this.angle);
+        this.yVelocity += this.thrust * Math.sin(this.angle);
     }
 
     move() {
@@ -433,6 +444,7 @@ export class fullPolygon extends SpinningPolygon {
     }
 
     doDrag() {
-        this.velocity = this.velocity * (1 - this.drag);
+        this.xVelocity *= (1 - this.drag);
+        this.yVelocity *= (1 - this.drag);
     }
 }

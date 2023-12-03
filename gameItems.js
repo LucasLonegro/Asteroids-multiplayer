@@ -45,7 +45,7 @@ export class Asteroid extends SpinningPolygon {
     }
 
     clone() {
-        return new Asteroid(this.velocity, this.direction, this.copyPoints());
+        return new Asteroid(this.velocity(), this.direction(), this.copyPoints());
     }
 
     scaleTo(factor) {
@@ -59,18 +59,26 @@ export class Asteroid extends SpinningPolygon {
         other.size = this.size;
         other.scaleTo(Math.pow(1 - sizeFactor, 0.5));
         this.scaleTo(Math.pow(sizeFactor, 0.5));
-        this.direction += separatingAngle;
-        other.direction -= separatingAngle;
+        this.changeDirBy(separatingAngle);
+        other.changeDirBy(-separatingAngle);
         other.rotateBy(Math.random() * 0.5 * Math.PI);
         let dv = Math.random() + 0.5;
-        let auxV = this.velocity * dv;
+        let auxV = (Math.pow(this.xVelocity, 2) + Math.pow(this.yVelocity, 2)) * dv;
 
-        if (auxV <= this.firstVelocity * 1.5 && auxV >= this.firstVelocity * 0.5)
-            this.velocity = auxV;
-        auxV = other.velocity * (1 - dv);
-        if (auxV <= other.firstVelocity * 1.5 && auxV >= other.firstVelocity * 0.5)
-            other.velocity = auxV;
-
+        if (auxV <= (Math.pow(this.firstVelocity, 2)) * 2.25 && auxV >= Math.pow(this.firstVelocity, 2) * 0.25) {
+            this.xVelocity *= dv;
+            this.yVelocity *= dv;
+        }
+        console.log(other)
+        console.log(other.xVelocity)
+        console.log(other.yVelocity)
+        auxV = (Math.pow(other.xVelocity, 2) + Math.pow(other.yVelocity, 2)) * (2 - dv);
+        console.log(auxV)
+        if (auxV <= (Math.pow(other.firstVelocity, 2)) * 2.25 && auxV >= Math.pow(other.firstVelocity, 2) * 0.25) {
+            console.log('in2')
+            other.xVelocity *= (2 - dv);
+            other.yVelocity *= (2 - dv);
+        }
         return other;
     }
 

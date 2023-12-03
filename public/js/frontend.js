@@ -12,13 +12,14 @@ window.addEventListener('load', function () {
     canvas.height = height * devicePixelRatio;
 
     const frontendItems = [];
-
+    let newData = false;
     socket.on('updatePlayers', (allItems) => {
         frontendItems.splice(0, frontendItems.length);
         if (allItems?.length) {
             reScale(allItems);
             allItems.forEach(i => frontendItems.push(i));
         }
+        newData = true
     })
 
     socket.on('dimensions', (dims) => {
@@ -37,10 +38,11 @@ window.addEventListener('load', function () {
 
     function animate(timeStamp) {
         const deltaTime = timeStamp - lastTime;
-        if (deltaTime >= 60 / this.FPS_CAP) {
+        if (newData && deltaTime >= 60 / this.FPS_CAP) {
             lastTime = timeStamp;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             frontendItems.forEach(pointCollection => draw(pointCollection));
+            newData = false;
         }
         requestAnimationFrame(animate);
     }

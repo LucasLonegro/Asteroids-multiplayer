@@ -34,6 +34,12 @@ window.addEventListener('load', function () {
         socket.emit('keyup', event.key);
     })
 
+    document.querySelector('#usernameForm').addEventListener('submit', (event)=>{
+        event.preventDefault(); // prevents refreshing screen
+        document.querySelector('#usernameForm').style.display='none';
+        socket.emit('initGame',document.querySelector('#usernameInput').value);
+    })
+
     let lastTime = 0;
 
     function animate(timeStamp) {
@@ -74,6 +80,12 @@ window.addEventListener('load', function () {
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
+        if(pointCollection.name && pointCollection.namePoint){
+            ctx.strokeStyle = pointCollection.fillColor; // names in the color of their spaceship
+            ctx.font='12px serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(pointCollection.name,pointCollection.namePoint.x,pointCollection.namePoint.y);
+        }
     }
 
 });

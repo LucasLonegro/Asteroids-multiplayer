@@ -39,6 +39,8 @@ export class Game {
     }
 
     addSpaceship(id) {
+        if (this.spaceshipIDs.indexOf(id) !== -1)
+            return;
         let color = this.COLORS[Math.round(Math.random() * (this.COLORS.length - 1))];
         this.spaceshipIDs.push(id);
         let idx = this.spaceshipIDs.indexOf(id);
@@ -162,6 +164,10 @@ export class Game {
         }
     }
 
+    setShipName(id, newName) {
+        this.spaceships[this.spaceshipIDs.indexOf(id)].name = newName;
+    }
+
     getSpawnSite() {
         let wall = Math.random() * 4;
         if (wall > 1) {
@@ -215,8 +221,7 @@ export class Game {
                             if (a.size < this.MIN_SIZE) {
                                 console.log('deleted')
                                 this.asteroids.splice(index, 1);
-                            }
-                            else
+                            } else
                                 this.asteroids.push(a.break(Math.random() * 0.5 + 0.25, Math.PI / 2 * Math.random()));
                             this.bullets.splice(bIndex, 1);
                             this.score += 1;

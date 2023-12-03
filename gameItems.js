@@ -119,7 +119,7 @@ export class DefaultAsteroid extends Asteroid {
 }
 
 export class Spaceship extends fullPolygon {
-    constructor(size, drag, thrustPower, basePoint, bulletVelocity, color) {
+    constructor(size, drag, thrustPower, basePoint, bulletVelocity, color, name) {
         if (!(basePoint instanceof Point))
             throw 'not a point';
         super(drag, thrustPower, 0, 0, basePoint, [new Point(basePoint.x, basePoint.y + size), new Point(basePoint.x - size / 3, basePoint.y), new Point(basePoint.x + size / 3, basePoint.y)]); // makes a little triangle
@@ -127,6 +127,7 @@ export class Spaceship extends fullPolygon {
         this.live = true;
         this.color = color;
         this.bulletVelocity = bulletVelocity;
+        this.name = name;
     }
 
     fire() {
@@ -149,8 +150,14 @@ export class Spaceship extends fullPolygon {
     }
 
     getPointCollection() {
-        if (this.live)
-            return super.getPointCollection('white', this.color);
+        if (this.live) {
+            let aux = this.pointArray.map(p => p.x);
+            return {
+                ...super.getPointCollection('white', this.color),
+                name: this.name,
+                namePoint: new Point(aux.reduce((s1, s2) => s1 + s2) / aux.length, Math.max(...this.pointArray.map(p => p.y)) + 12)
+            };
+        }
         return undefined;
     }
 }

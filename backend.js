@@ -43,13 +43,12 @@ function getPointCollections(itemCollections) {
     return pointCollections;
 }
 
+const maxUsernameLength = 20;
 io.on('connection', (socket) => {
     console.log('A user has connected')
     backendPlayers[socket.id] = {
         id: socket.id
     }
-
-    game.addSpaceship(socket.id)
 
     movements[socket.id] =
         {
@@ -66,6 +65,13 @@ io.on('connection', (socket) => {
         delete backendPlayers[socket.id]
         game.removeSpaceship(socket.id)
         io.emit('updatePlayers', backendPlayers)
+    })
+
+    socket.on('initGame', (name) => {
+        game.addSpaceship(socket.id)
+        if (name instanceof String || typeof name === 'string') {
+            game.setShipName(socket.id, name.slice(0, maxUsernameLength));
+        }
     })
 
     socket.on('keyup', (key) => {

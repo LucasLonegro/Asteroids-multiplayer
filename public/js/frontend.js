@@ -15,8 +15,10 @@ window.addEventListener('load', function () {
 
     socket.on('updatePlayers', (allItems) => {
         frontendItems.splice(0, frontendItems.length);
-        if (allItems)
+        if (allItems) {
+            reScale(allItems);
             allItems.forEach(i => frontendItems.push(i));
+        }
     })
 
     socket.on('dimensions', (dims) => {
@@ -38,7 +40,6 @@ window.addEventListener('load', function () {
         if (deltaTime >= 60 / this.FPS_CAP) {
             lastTime = timeStamp;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            reScale(frontendItems);
             frontendItems.forEach(pointCollection => draw(pointCollection));
         }
         requestAnimationFrame(animate);

@@ -46,7 +46,6 @@ export class Game {
         let idx = this.spaceshipIDs.indexOf(id);
         this.spaceships[idx] = new Spaceship(this.SPACESHIP_SIZE, this.SPACESHIP_DRAG, this.SPACESHIP_THRUST / this.fpsCap, this.shipSpawn(), this.ASTEROID_SPEED / this.fpsCap * 4, color);
         this.spaceshipFireIntervals[idx] = this.FIRE_INTERVAL * this.fpsCap;
-        console.log(this.spaceships.length)
     }
 
     removeSpaceship(id) {

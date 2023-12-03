@@ -92,8 +92,6 @@ io.on('connection', (socket) => {
         else if (key.toLowerCase() === 'a')
             movements[socket.id].turn = 1;
     })
-
-    console.log(backendPlayers)
 })
 
 

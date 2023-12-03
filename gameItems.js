@@ -69,13 +69,8 @@ export class Asteroid extends SpinningPolygon {
             this.xVelocity *= dv;
             this.yVelocity *= dv;
         }
-        console.log(other)
-        console.log(other.xVelocity)
-        console.log(other.yVelocity)
         auxV = (Math.pow(other.xVelocity, 2) + Math.pow(other.yVelocity, 2)) * (2 - dv);
-        console.log(auxV)
         if (auxV <= (Math.pow(other.firstVelocity, 2)) * 2.25 && auxV >= Math.pow(other.firstVelocity, 2) * 0.25) {
-            console.log('in2')
             other.xVelocity *= (2 - dv);
             other.yVelocity *= (2 - dv);
         }

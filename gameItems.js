@@ -119,6 +119,7 @@ export class Spaceship extends fullPolygon {
             throw 'not a point';
         super(drag, thrustPower, 0, 0, basePoint, [new Point(basePoint.x, basePoint.y + size), new Point(basePoint.x - size / 3, basePoint.y), new Point(basePoint.x + size / 3, basePoint.y)]); // makes a little triangle
         this.angle = Math.PI / 2;
+        this.trueAngle = this.angle;
         this.live = true;
         this.color = color;
         this.bulletVelocity = bulletVelocity;
@@ -135,8 +136,10 @@ export class Spaceship extends fullPolygon {
     }
 
     rotateBy(angle) {
-        if (this.live)
+        if (this.live && Math.abs(this.trueAngle-this.angle) > this.ANGLE_TOLERANCE)
             super.rotateBy(angle);
+        else
+            this.trueAngle+=angle;
     }
 
     draw(context) {

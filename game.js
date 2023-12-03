@@ -1,14 +1,6 @@
 import {DefaultAsteroid, Spaceship} from "./gameItems.js";
 import {Point} from "./polygons.js";
 
-class Movements {
-    constructor(turn, fire, thrust) { // yes I know this shouldn't be a class in js
-        this.turn = Math.sign(turn);
-        this.fire = fire;
-        this.thrust = thrust;
-    }
-}
-
 export class Game {
     ASTEROID_SPEED = 160
     ASTEROID_SIZE = 15.0
@@ -16,7 +8,7 @@ export class Game {
     SPACESHIP_DRAG = 0.05 // 0.05
     SPACESHIP_SIZE = 20
     SPACESHIP_ROTATION = 3.6 // * 1.5
-    ASTEROID_INTERVAL = 1600
+    ASTEROID_INTERVAL = 3200
     FIRE_INTERVAL = 0.2
     MIN_SIZE = this.ASTEROID_SIZE * 0.6
     MAX_ASTEROIDS = 15 //10
@@ -135,7 +127,7 @@ export class Game {
         return spaceship;
     }
 
-    spaceshipActions(movements) {
+    spaceshipActions() {
         this.spaceshipIDs.forEach(((v, k) => {
             let s = this.spaceships[k];
             if (!this.movements[v])
@@ -157,7 +149,7 @@ export class Game {
     addAsteroids() {
         this.asteroidInterval--;
         if (this.asteroidInterval <= 0 && this.asteroids.length < this.MAX_ASTEROIDS) {
-            this.asteroidInterval = this.ASTEROID_INTERVAL / this.fpsCap;
+            this.asteroidInterval = this.ASTEROID_INTERVAL / this.fpsCap * 2 * Math.random();
             let toAdd = new DefaultAsteroid(this.ASTEROID_SPEED / this.fpsCap, Math.PI * 2 * Math.random(), (Math.random() * 1.5 + 0.5) * this.ASTEROID_SIZE, this.getSpawnSite());
             toAdd.rotateBy(Math.random() * 2 * Math.PI);
             this.asteroids.push(toAdd);
@@ -204,10 +196,9 @@ export class Game {
                     this.asteroids.splice(index, 1);
                 }
             });
-            this.spaceships.forEach((s, id) => {
+            this.spaceships.forEach((s) => {
                 if (s.live && s.intersectedBy(a)) {
                     s.live = false;
-                    //this.spaceships.splice(id,1);
                     this.asteroids.splice(index, 1);
                 }
             });
@@ -243,10 +234,9 @@ export class Game {
                         }
                         return false;
                     });
-                    this.spaceships.some((s, id) => {
+                    this.spaceships.some((s) => {
                         if (s.live && s.intersectedBy(ray)) {
                             s.live = false;
-                            //this.spaceships.splice(id,1);
                             this.bullets.splice(this.bullets.indexOf(b), 1);
                             return true;
                         }

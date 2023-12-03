@@ -36,6 +36,7 @@ window.addEventListener('load', function () {
         if(deltaTime >= 60 / this.FPS_CAP) {
             lastTime = timeStamp;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            reScale(frontendItems);
             frontendItems.forEach(pointCollection => draw(pointCollection));
         }
         requestAnimationFrame(animate);
@@ -43,6 +44,13 @@ window.addEventListener('load', function () {
 
     animate();
 
+    function reScale(frontendItems){
+        if(devicePixelRatio !== 1)
+        frontendItems.forEach(all => all.forEach(pointCollection => pointCollection.points.forEach(p => {
+            p.x *= devicePixelRatio;
+            p.y *= devicePixelRatio;
+        })));
+    }
     function draw(pointCollection){
         ctx.fillStyle = pointCollection.fillColor;
         if(pointCollection.points.length <= 1){

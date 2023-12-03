@@ -214,12 +214,11 @@ export class Game {
                         if (a.intersectedBy(ray)) {
                             if (a.size < this.MIN_SIZE)
                                 this.asteroids.splice(index, 1);
-                            else {
+                            else
                                 this.asteroids.push(a.break(Math.random() * 0.5 + 0.25, Math.PI / 2 * Math.random()));
-                                this.bullets.splice(bIndex, 1);
-                                return true;
-                            }
+                            this.bullets.splice(bIndex, 1);
                             this.score += 1;
+                            return true;
                         }
                         return false;
                     })

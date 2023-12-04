@@ -217,7 +217,7 @@ export class Game {
                     let ray = b.moveLine();
                     this.asteroids.some((a, index) => {
                         if (a.intersectedBy(ray)) {
-                            if (a.size < this.MIN_SIZE)
+                            if (a.size < this.MIN_SIZE || this.asteroids.length >= this.MAX_ASTEROIDS)
                                 this.asteroids.splice(index, 1);
                             else
                                 this.asteroids.push(a.break(Math.random() * 0.5 + 0.25, Math.PI / 2 * Math.random()));

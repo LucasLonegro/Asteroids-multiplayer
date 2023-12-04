@@ -182,17 +182,17 @@ export class Game {
     }
 
     runCollisions() {
-        let xLimit = this.width * 1.2, yLimit = this.height * 1.2;
-        let zeroX = -this.width * 0.2, zeroY = -this.width * 0.2
+        let xLimit = this.width * 1.1, yLimit = this.height * 1.1;
+        let zeroX = -this.width * 0.1, zeroY = -this.width * 0.1;
         this.asteroids.forEach((a, index) => {
             if (a.pointArray[0].x > xLimit)
-                a.moveBy(-this.width * 1.4, 0);
+                a.moveBy(-this.width * 1.2, 0);
             if (a.pointArray[0].x < zeroX)
-                a.moveBy(this.width * 1.4, 0);
+                a.moveBy(this.width * 1.2, 0);
             if (a.pointArray[0].y > yLimit)
-                a.moveBy(0, -this.height * 1.4);
+                a.moveBy(0, -this.height * 1.2);
             if (a.pointArray[0].y < zeroY)
-                a.moveBy(0, this.height * 1.4);
+                a.moveBy(0, this.height * 1.2);
 
             this.fighters.forEach((s, id) => {
                 if (s.live && s.intersectedBy(a)) {

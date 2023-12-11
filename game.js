@@ -13,7 +13,6 @@ export class Game {
     MIN_SIZE = this.ASTEROID_SIZE * 0.6
     MAX_ASTEROIDS = 15 //10
     COLORS = ['green', 'purple', 'teal', 'fuchsia', 'aqua', 'lime', 'yellow', 'olive', 'orange', 'red'];
-    FIGHTERS_THRESHOLD = 0
     SPAWN_FIGHTERS = true
     MAX_FIGHTERS = 5 // 5
     FIGHTER_SIZE_MULTIPLIER = 1.8 // 1.5
@@ -35,7 +34,27 @@ export class Game {
         this.asteroids = [];
         this.fighters = [];
         this.allItems = [this.bullets, this.spaceships, this.fighters, this.asteroids];
-        this.score = 0;
+        this.scores = [];
+        this.updatedScores = false;
+    }
+
+    increaseScore(delta, name) {
+        if(name === undefined) // in case fighter shoots another fighter / user has not given a name (somehow)
+            return;
+        this.updatedScores = true;
+        if (!this.scores[name])
+            this.scores[name] = 0;
+        this.scores[name] += delta;
+    }
+
+    scoreBoard() {
+        let ret = [];
+        this.spaceships.forEach(s =>
+            ret.push({
+                name: s.name,
+                score: this.scores[s.name]
+            }));
+        return ret;
     }
 
     addSpaceship(id) {
@@ -59,6 +78,7 @@ export class Game {
     }
 
     update() {
+        this.updatedScores = false;
         if (this.gameOver())
             this.restart();
         this.addAsteroids();
@@ -74,8 +94,8 @@ export class Game {
     }
 
     restart() {
-        this.score = 0;
         this.spaceships.forEach(v => {
+            this.scores[v.name] = 0;
             v.live = true;
             let p = this.shipSpawn();
             let dx = p.x - v.pointArray[0].x
@@ -158,7 +178,7 @@ export class Game {
     }
 
     addFighters() {
-        if (this.score >= this.FIGHTERS_THRESHOLD && this.fighters.length < this.MAX_FIGHTERS && this.SPAWN_FIGHTERS && (Math.random() < (1.0 / this.FIGHTER_SPAWN_RARITY))) {
+        if (this.fighters.length < this.MAX_FIGHTERS && this.SPAWN_FIGHTERS && (Math.random() < (1.0 / this.FIGHTER_SPAWN_RARITY))) {
             this.fighters.push(new Spaceship(this.SPACESHIP_SIZE * this.FIGHTER_SIZE_MULTIPLIER, this.SPACESHIP_DRAG, this.SPACESHIP_THRUST / this.fpsCap / 1.5, this.getSpawnSite(), this.ASTEROID_SPEED / this.fpsCap * 1.2, 'gray'));
         }
     }
@@ -222,7 +242,7 @@ export class Game {
                             else
                                 this.asteroids.push(a.break(Math.random() * 0.5 + 0.25, Math.PI / 2 * Math.random()));
                             this.bullets.splice(bIndex, 1);
-                            this.score += 1;
+                            this.increaseScore(1, b.name);
                             return true;
                         }
                         return false;
@@ -233,7 +253,7 @@ export class Game {
                             s.live = false;
                             this.fighters.splice(id, 1);
                             this.bullets.splice(this.bullets.indexOf(b), 1);
-                            this.score += 10;
+                            this.increaseScore(10, b.name);
                             return true;
                         }
                         return false;

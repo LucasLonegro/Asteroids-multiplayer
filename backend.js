@@ -98,10 +98,11 @@ io.on('connection', (socket) => {
 server.listen(port, () => {
     console.log(`Listening on port ${port}`)
 })
-
 setInterval(() => {
     game.update()
     io.emit('updatePlayers', getPointCollections(game.allItems))
+    if (game.updatedScores)
+        io.emit('updateScoreboard', game.scoreBoard())
 }, 15)
 
 console.log('Loaded')

@@ -1,12 +1,13 @@
 import {fullPolygon, Line, Point, SpinningPolygon} from "./polygons.js";
 
 export class Bullet {
-    constructor(velocity, direction, color, point) {
+    constructor(velocity, direction, color, point,name) {
         this.point = new Point(point.x, point.y);
         this.velocity = velocity;
         this.direction = direction;
         this.color = color;
         this.cooldown = 1;
+        this.name = name;
     }
 
     move() {
@@ -127,7 +128,7 @@ export class Spaceship extends fullPolygon {
     }
 
     fire() {
-        return new Bullet(this.bulletVelocity, this.angle, this.color, new Point(this.pointArray[0].x, this.pointArray[0].y));
+        return new Bullet(this.bulletVelocity, this.angle, this.color, new Point(this.pointArray[0].x, this.pointArray[0].y),this.name);
     }
 
     move() {

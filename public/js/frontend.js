@@ -7,7 +7,6 @@ window.addEventListener('load', function () {
 
     const socket = io();
     const devicePixelRatio = window.devicePixelRatio || 1;
-
     canvas.width = width * devicePixelRatio;
     canvas.height = height * devicePixelRatio;
 
@@ -22,6 +21,8 @@ window.addEventListener('load', function () {
         newData = true
     })
 
+    socket.on('updateScoreboard', (board) => console.log(board));
+
     socket.on('dimensions', (dims) => {
         canvas.width = dims.width * devicePixelRatio;
         canvas.height = dims.height * devicePixelRatio;
@@ -34,10 +35,10 @@ window.addEventListener('load', function () {
         socket.emit('keyup', event.key);
     })
 
-    document.querySelector('#usernameForm').addEventListener('submit', (event)=>{
+    document.querySelector('#usernameForm').addEventListener('submit', (event) => {
         event.preventDefault(); // prevents refreshing screen
-        document.querySelector('#usernameForm').style.display='none';
-        socket.emit('initGame',document.querySelector('#usernameInput').value);
+        document.querySelector('#usernameForm').style.display = 'none';
+        socket.emit('initGame', document.querySelector('#usernameInput').value);
     })
 
     let lastTime = 0;
@@ -80,11 +81,11 @@ window.addEventListener('load', function () {
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
-        if(pointCollection.name && pointCollection.namePoint){
+        if (pointCollection.name && pointCollection.namePoint) {
             ctx.strokeStyle = pointCollection.fillColor; // names in the color of their spaceship
-            ctx.font='12px serif';
+            ctx.font = '12px serif';
             ctx.textAlign = 'center';
-            ctx.fillText(pointCollection.name,pointCollection.namePoint.x,pointCollection.namePoint.y);
+            ctx.fillText(pointCollection.name, pointCollection.namePoint.x * devicePixelRatio, pointCollection.namePoint.y * devicePixelRatio);
         }
     }
 
